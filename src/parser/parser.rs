@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct JsonResponse {
-    #[serde(rename = "crate")]  // ← Aspas!
-    pub crate_info: CrateInfo,   // ← snake_case
+    #[serde(rename = "crate")] 
+    pub crate_info: CrateInfo,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -30,7 +30,7 @@ impl CrateInfo {
     }
     
     pub fn has_documentation(&self) -> bool {
-        self.documentation.is_some()  // ← minúscula!
+        self.documentation.is_some()  
     }
 }
 
