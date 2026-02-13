@@ -1,26 +1,16 @@
+mod parser;
 mod searcher;
 
-use clap::Parser;
-use searcher::searchCrate::CrateSearcher;
-
-#[derive(Parser, Debug)]
-struct Args {
-    name: String,
-}
+use searcher::CrateSearcher;
 
 fn main() {
-    let args = Args::parse();
     let searcher = CrateSearcher::new();
     
-    match searcher.search_crate(&args.name) 
-    {
-        Ok(json) => {
-            println!("Found crate: {}", args.name);
-            println!("Response: {}", json);
+    match searcher.get_crate_info("serde") {
+        Ok(info) => {
+            println!("{}", info.get_summary());  
         }
-        Err(e) => {
-            eprintln!("Error searching for '{}': {}", args.name, e);
-        }
+        Err(e) => println!("Error: {}", e),
     }
 }
 
