@@ -1,30 +1,28 @@
 mod parser;
 mod searcher;
+mod manager;
 
 use searcher::CrateSearcher;
 use clap::Parser;
-
-fn search(crate_name: &str)
+fn search(crate_name: &str) -> Result<(), Box<dyn std::error::Error>>
 {
     let searcher = CrateSearcher::new();
-
-
-    match searcher.get_crate_info(crate_name) 
-    {
-        Ok(info) => {
-            println!("Found crate!");
-            println!("{}", info.get_summary());  
-        }
-        Err(e) => println!("Error searching for: {} - Details: {}", crate_name, e),
-    }
-
+    
+    let info = searcher.get_crate_info(crate_name)?;
+    println!("Found crate!");
+    println!("{}", info.get_summary());
+    
+    let mut toml_file = manager::manager::find_toml()?;
+    manager::manager::add_crate(&mut toml_file, crate_name)?;
+    
+    println!("Crate '{}' added to Cargo.toml!", crate_name);
+    Ok(())
 }
-
 #[derive(Parser, Debug)]
 struct Args
 {
     #[arg(
-        short = 'c', 
+        short = 's', 
         long = "search",
         alias = "find",
         default_value = "nothing" 
