@@ -4,6 +4,7 @@ mod manager;
 
 use searcher::CrateSearcher;
 use clap::Parser;
+
 fn search(crate_name: &str) -> Result<(), Box<dyn std::error::Error>>
 {
     let searcher = CrateSearcher::new();
@@ -33,6 +34,11 @@ struct Args
 fn main() {
     let search_query = Args::parse();
 
-    search(&search_query.crate_to_search);
+    if let Err(e) = search(&search_query.crate_to_search) {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
+
+
 }
 
